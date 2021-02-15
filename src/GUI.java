@@ -26,13 +26,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.text.DefaultCaret;
-
 
 /**
  *This is the GUI class that generates a user intractable GUI
@@ -93,6 +93,10 @@ public class GUI extends JFrame implements ActionListener
 
 
     public JButton btnIn2;
+
+    public JButton btnIn3;
+
+    public JButton btnIn4;
     /**
      * This buttons clear your selection
      */
@@ -190,8 +194,16 @@ public class GUI extends JFrame implements ActionListener
     /**
      * south panel
      */
+
     public JPanel SouthPanel;
 
+
+
+    public JPanel fillPanel;
+
+    public JPanel EastNorthNorthPanel;
+    public JPanel EastNorthCenterPanel;
+    public JPanel EastNorthSouthPanel;
 
     public JPanel panelG;
     /**
@@ -1320,6 +1332,7 @@ public class GUI extends JFrame implements ActionListener
 
 
 
+
         this.setContentPane(new JPanel(){
             @Override
             public void paintComponent(Graphics g) {
@@ -1337,6 +1350,9 @@ public class GUI extends JFrame implements ActionListener
                 g.drawImage(techimage, 0, 0, null);
             }
         });
+
+
+
 
         setSize(500,600);
 
@@ -1735,8 +1751,8 @@ public class GUI extends JFrame implements ActionListener
 
         int temp = 0;
         int nutrient = 0;
-        JLabel nameLabel = new JLabel ("Current Water Temperature:  " + temp + " units", SwingConstants.CENTER);
-        JLabel passLabel = new JLabel ("Current Suspended Nutrient Quantity: " + nutrient + " units", SwingConstants.CENTER);
+        JLabel nameLabel = new JLabel ("GrowLight Control  " + temp + " units", SwingConstants.CENTER);
+        JLabel passLabel = new JLabel ("Water Pump Control: " + nutrient + " units", SwingConstants.CENTER);
 
 
         JLabel invalidLabel = new JLabel ("");
@@ -1797,9 +1813,9 @@ public class GUI extends JFrame implements ActionListener
 
 
 
-        CenterPanel.setLayout(new GridLayout(6,1));
+        CenterPanel.setLayout(new GridLayout(3,1));
         //CenterNPanel.setLayout(new GridLayout(1,1));
-        //CenterCPanel.setLayout(new GridLayout(1,1));
+        CenterCPanel.setLayout(new GridLayout(3,1));
         //CenterSPanel.setLayout(new GridLayout(1,1));
 
         textField = new JTextField(20);
@@ -1824,24 +1840,58 @@ public class GUI extends JFrame implements ActionListener
         passLabel.setForeground(Color.BLACK);
 
 
-        btnIn = new JButton("Submit Target Temperature");
+        btnIn = new JButton("Enter Light Value");
         btnIn.addActionListener(this);
         btnIn.setActionCommand("in");
-        btnIn2 = new JButton("Submit Target Nutrient value");
+        btnIn2 = new JButton("Enter Water Time");
         btnIn2.addActionListener(this);
         btnIn2.setActionCommand("in");
 
 
+        btnIn3 = new JButton("History");
+        btnIn3.addActionListener(this);
+        btnIn3.setActionCommand("in");
+
+        NorthPanel.setLayout(new GridLayout(3,3));
+        //fillPanel.setLayout(new GridLayout(1,1));
+
+        JLabel label10 = new JLabel("");
+        JLabel label11 = new JLabel("");
+        JLabel label12 = new JLabel("");
+        JLabel label13 = new JLabel("");
+
+        //NorthPanel.add(fillPanel);
+        NorthPanel.add(label10);
+        NorthPanel.add(label11);
+        NorthPanel.add(label12);
+        NorthPanel.add(label13);
+
+        NorthPanel.add(btnIn3);
 
         CenterPanel.add(nameLabel);
         CenterPanel.add(textField);
         CenterPanel.add(btnIn);
 
-        CenterPanel.add(passLabel);
-        CenterPanel.add(textField2);
-        CenterPanel.add(btnIn2);
+        CenterCPanel.add(passLabel);
+        CenterCPanel.add(textField2);
+        CenterCPanel.add(btnIn2);
         //CenterPanel.add(invalidLabel);
 
+
+        try {
+            //techimage = ImageIO.read(GUI.class.getResource("techimage.jpg"));
+            techimage = ImageIO.read(GUI.class.getResource("tank.jpg"));
+            //System.out.println(GUI.class.getResource("techimage.jpg").toString());
+            //techimage = ImageIO.read(new File("techimage"));
+        }
+        catch(Exception e/*IOException e*/) {
+            System.out.println("Bad");
+        }
+
+
+//        ImageLabel label5 = new ImageLabel(new ImageIcon("tank.png"));
+//        label5.setLocation(29, 40);
+//        SouthPanel.add(label5);
 
 
 
@@ -1850,13 +1900,23 @@ public class GUI extends JFrame implements ActionListener
 
 
 
+        SouthPanel.setLayout(new GridLayout(1,1));
+        ImageLabel label = new ImageLabel(new ImageIcon("src/tank.png"));
+        label.setLocation(29, 60);
+        SouthPanel.add(label);
+
+
+
+
+
         //GUI.this.add(NorthPanel);
-        GUI.this.setLayout(null);
+        GUI.this.setLayout(new GridLayout(2,2));
         GUI.this.getContentPane().removeAll();
 
+        GUI.this.add(SouthPanel);
         GUI.this.add(CenterPanel);
-
-
+        GUI.this.add(NorthPanel);
+        GUI.this.add(CenterCPanel);
         //GUI.this.add(SouthPanel);
 
         GUI.this.revalidate();
