@@ -32,6 +32,8 @@ import java.net.Socket;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultCaret;
 
 /**
@@ -39,11 +41,16 @@ import javax.swing.text.DefaultCaret;
  *
  *
  */
-public class GUI extends JFrame implements ActionListener
-{
+public class GUI extends JFrame implements ActionListener, ChangeListener {
 
     // TODO: set currentUser on successful login
     //private User currentUser;
+
+    public static int squareX = 5;
+    public static int squareY = 200;
+    public static int squareW = 500;
+    public static int squareH = 150;
+    public static int waterY = 100;
 
     /**
      * This is an array of array of Strings containing the data of the players and their statistics
@@ -197,7 +204,7 @@ public class GUI extends JFrame implements ActionListener
 
     public JPanel SouthPanel;
 
-
+    public JPanel HistoPanel;
 
     public JPanel fillPanel;
 
@@ -813,6 +820,7 @@ public class GUI extends JFrame implements ActionListener
                 super.paintComponent(g);
                 // Draw the background image.
                 g.drawImage(techimage, 0, 0, null);
+
             }
         });
 
@@ -842,6 +850,390 @@ public class GUI extends JFrame implements ActionListener
 
 
     }
+
+    public void goSeventhPage() throws IOException {
+
+        new GUI(8080, 0);
+
+        currentPage = 1;
+
+        try
+        {
+            NorthPanel.removeAll();
+            CenterPanel.removeAll();
+            SouthPanel.removeAll();
+            CenterNPanel.removeAll();
+            CenterCPanel.removeAll();
+            CenterSPanel.removeAll();
+
+            NorthPanel.revalidate();
+            CenterPanel.revalidate();
+            SouthPanel.revalidate();
+            CenterNPanel.revalidate();
+            CenterCPanel.revalidate();
+            CenterSPanel.revalidate();
+
+            NorthPanel.repaint();
+            CenterPanel.repaint();
+            SouthPanel.repaint();
+            CenterNPanel.repaint();
+            CenterCPanel.repaint();
+            CenterSPanel.repaint();
+        }
+        catch(NullPointerException e)
+        {
+
+        }
+
+        int squareX = 20;
+        int squareY = 220;
+        int squareW = 100;
+        int squareH = 400;
+
+
+
+        this.setContentPane(new JPanel(){
+            @Override
+            public void paintComponent(Graphics g) {
+                try {
+                    //techimage = ImageIO.read(GUI.class.getResource("techimage.jpg"));
+                    techimage = ImageIO.read(GUI.class.getResource("techimage.jpg"));
+                    //System.out.println(GUI.class.getResource("techimage.jpg").toString());
+                    //techimage = ImageIO.read(new File("techimage"));
+                }
+                catch(Exception e/*IOException e*/) {
+                    System.out.println("Bad");
+                }
+                //return to
+                super.paintComponent(g);
+
+                // Draw the background image.
+                g.drawImage(techimage, 0, 0, null);
+                //g.setColor(Color.RED);
+                //g.fillRect(squareX,squareY,squareW,squareH);
+            }
+        });
+
+
+
+        JSlider slider = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        slider.setMinorTickSpacing(5);
+        slider.setMajorTickSpacing(10);
+
+
+        //CenterPanel.setBorder(new EmptyBorder());
+
+        int temp = 0;
+        int nutrient = 0;
+        JLabel nameLabel = new JLabel ("GrowLight Control  " + temp + " units", SwingConstants.CENTER);
+        JLabel passLabel = new JLabel ("Water Pump Control: " + nutrient + " units", SwingConstants.CENTER);
+
+
+        JLabel invalidLabel = new JLabel ("");
+
+        if(registerSuccess == true)
+        {
+            invalidLabel.setText("Registration Successful");
+            invalidLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+            invalidLabel.setForeground(Color.WHITE);
+
+            registerSuccess = false;
+        }
+
+
+
+        KeyListener listener = new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent event) {}
+
+            /**
+             * A method that Overrides the default keyReleased method
+             * specific to inputs of textField
+             */
+            @Override
+            public void keyReleased(KeyEvent event) {
+
+                if(event.getKeyCode() == KeyEvent.VK_ENTER)
+                {
+                    username = textField.getText();
+                    password = textField2.getText();
+                    //memo = textField3.getText();
+                    System.out.println("Username: " + username);
+                    System.out.println("Password: " + password);
+                    //System.out.println("Memo: " + memo);
+                    checkUser();
+                }
+            }
+
+
+
+
+
+            /**
+             * A method of KeyListener that insists on being Overridden
+             */
+
+            @Override
+            public void keyTyped(KeyEvent event) {
+            }
+
+//            private void shortenUpdate(KeyEvent e)
+//            {
+//
+//            }
+        };
+
+
+
+
+        CenterPanel.setLayout(new GridLayout(3,1));
+        //CenterNPanel.setLayout(new GridLayout(1,1));
+        CenterCPanel.setLayout(new GridLayout(3,1));
+        //CenterSPanel.setLayout(new GridLayout(1,1));
+
+        textField = new JTextField(20);
+//        textField.setPreferredSize(new Dimension(2,100));
+//        textField.setSize(new Dimension(2,100));
+
+
+        textField2 = new JTextField(20);
+//        textField2.setPreferredSize(new Dimension(2,100));
+//        textField2.setSize(new Dimension(2,100));
+        //CenterNPanel.setLayout(new BorderLayout());
+        //CenterNPanel.add(CenterPanel.add(nameLabel),BorderLayout.SOUTH);
+
+
+        textField2.addKeyListener(listener);
+
+
+        nameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        nameLabel.setForeground(Color.BLACK);
+
+        passLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        passLabel.setForeground(Color.BLACK);
+
+
+        btnIn = new JButton("Enter Light Value");
+        btnIn.addActionListener(this);
+        btnIn.setActionCommand("in");
+        btnIn2 = new JButton("Enter Water Time");
+        btnIn2.addActionListener(this);
+        btnIn2.setActionCommand("in");
+
+
+        btnIn3 = new JButton("History");
+        btnIn3.addActionListener(this);
+        btnIn3.setActionCommand("return");
+
+        NorthPanel.setLayout(new GridLayout(3,3));
+        //fillPanel.setLayout(new GridLayout(1,1));
+
+        JLabel label10 = new JLabel("");
+        JLabel label11 = new JLabel("");
+        JLabel label12 = new JLabel("");
+        JLabel label13 = new JLabel("");
+
+//        final RectPanel[] rectPan = {new RectPanel()};
+//        JLabel statusLabel = new JLabel();
+//        slider = new JSlider(JSlider.VERTICAL,0,100,10);
+//        slider.addChangeListener(new ChangeListener() {
+//            public void stateChanged(ChangeEvent e) {
+//                statusLabel.setText("Value : " + ((JSlider) e.getSource()).getValue());
+//                waterY = ((JSlider) e.getSource()).getValue();
+//                System.out.println("WaterY is: " + waterY);
+//                rectPan[0] = new RectPanel();
+//                repaint();
+//            }
+//        });
+
+
+
+        //NorthPanel.add(fillPanel);
+        NorthPanel.add(label10);
+        NorthPanel.add(label11);
+        NorthPanel.add(label12);
+        //NorthPanel.add(label13);
+
+        //NorthPanel.add(slider);
+        NorthPanel.add(btnIn3);
+
+        CenterPanel.add(nameLabel);
+        CenterPanel.add(textField);
+        CenterPanel.add(btnIn);
+
+        CenterCPanel.add(passLabel);
+        CenterCPanel.add(textField2);
+        CenterCPanel.add(btnIn2);
+        //CenterPanel.add(invalidLabel);
+
+        try {
+            //techimage = ImageIO.read(GUI.class.getResource("techimage.jpg"));
+            techimage = ImageIO.read(GUI.class.getResource("techimage.jpg"));
+            //System.out.println(GUI.class.getResource("techimage.jpg").toString());
+            //techimage = ImageIO.read(new File("techimage"));
+        }
+        catch(Exception e/*IOException e*/) {
+            System.out.println("Bad");
+        }
+
+
+//        ImageLabel label5 = new ImageLabel(new ImageIcon("tank.png"));
+//        label5.setLocation(29, 40);
+//        SouthPanel.add(label5);
+
+
+
+        //CenterPanel.add(CenterNPanel);
+        //CenterPanel.add(CenterSPanel);
+
+
+
+
+        //ImageLabel label = new ImageLabel(new ImageIcon("src/tank.png"));
+        //BufferedImage img = ImageIO.read(label);
+        //Graphics2D g2d = img.createGraphics();
+        //label.setLocation(0, 0);
+        //this.add(label);
+        //g.setColor(Color.cyan);
+        //g.fillRect(squareX,squareY,squareW,squareH);
+
+
+
+
+
+        //JPanel Panny = new RectPanel();
+
+
+
+        // slider.addChangeListener(this);
+
+
+
+//        ChangeListener slideListen = new ChangeListener() {
+//            @Override
+//            public void stateChanged(ChangeEvent e) {
+//                statusLabel.setText("Value : " + ((JSlider) e.getSource()).getValue());
+//                waterY = ((JSlider) e.getSource()).getValue();
+//                System.out.println("WaterY is: " + waterY);
+//                repaint();
+//            }
+//        };
+
+        //slider.addChangeListener(slideListen);
+
+        // slider.addChangeListener(new ChangeListener() {
+        //public void stateChanged(ChangeEvent e) {
+        //
+        //     }
+        //  });
+
+
+        //Panny.setLayout(new GridLayout(1,2));
+        //ImageLabel label = new ImageLabel(new ImageIcon("src/tank.png"));
+        //label.setLocation(29, 60);
+        //Panny.add(label);
+
+        //Panny.add(slider);
+        //GUI.this.add(NorthPanel);
+        GUI.this.setLayout(new GridLayout(2,2));
+        GUI.this.getContentPane().removeAll();
+
+        HistoPanel = new JPanel();
+        HistoPanel.setLayout(new GridLayout(2,3));
+
+        HistogramPanel Hpanel = new HistogramPanel();
+        Hpanel.addHistogramColumn("A", 350, Color.RED);
+        Hpanel.addHistogramColumn("B", 690, Color.YELLOW);
+        Hpanel.addHistogramColumn("C", 510, Color.BLUE);
+        Hpanel.addHistogramColumn("D", 570, Color.ORANGE);
+        Hpanel.addHistogramColumn("E", 180, Color.MAGENTA);
+        Hpanel.addHistogramColumn("F", 504, Color.CYAN);
+        Hpanel.layoutHistogram();
+
+
+        //GUI.this.add(Hpanel);
+
+
+        HistogramPanel H2panel = new HistogramPanel();
+        H2panel.addHistogramColumn("A", 350, Color.RED);
+        H2panel.addHistogramColumn("B", 690, Color.YELLOW);
+        H2panel.addHistogramColumn("C", 510, Color.BLUE);
+        H2panel.addHistogramColumn("D", 570, Color.ORANGE);
+        H2panel.addHistogramColumn("E", 180, Color.MAGENTA);
+        H2panel.addHistogramColumn("F", 504, Color.CYAN);
+        H2panel.layoutHistogram();
+
+        //GUI.this.add(H2panel);
+
+        HistogramPanel H3panel = new HistogramPanel();
+        H3panel.addHistogramColumn("A", 350, Color.RED);
+        H3panel.addHistogramColumn("B", 690, Color.YELLOW);
+        H3panel.addHistogramColumn("C", 510, Color.BLUE);
+        H3panel.addHistogramColumn("D", 570, Color.ORANGE);
+        H3panel.addHistogramColumn("E", 180, Color.MAGENTA);
+        H3panel.addHistogramColumn("F", 504, Color.CYAN);
+        H3panel.layoutHistogram();
+
+        //GUI.this.add(H3panel);
+
+        HistogramPanel H4panel = new HistogramPanel();
+        H4panel.addHistogramColumn("A", 350, Color.RED);
+        H4panel.addHistogramColumn("B", 690, Color.YELLOW);
+        H4panel.addHistogramColumn("C", 510, Color.BLUE);
+        H4panel.addHistogramColumn("D", 570, Color.ORANGE);
+        H4panel.addHistogramColumn("E", 180, Color.MAGENTA);
+        H4panel.addHistogramColumn("F", 504, Color.CYAN);
+        H4panel.layoutHistogram();
+
+        //GUI.this.add(H4panel);
+
+        HistogramPanel H5panel = new HistogramPanel();
+        H5panel.addHistogramColumn("A", 350, Color.RED);
+        H5panel.addHistogramColumn("B", 690, Color.YELLOW);
+        H5panel.addHistogramColumn("C", 510, Color.BLUE);
+        H5panel.addHistogramColumn("D", 570, Color.ORANGE);
+        H5panel.addHistogramColumn("E", 180, Color.MAGENTA);
+        H5panel.addHistogramColumn("F", 504, Color.CYAN);
+        H5panel.layoutHistogram();
+
+        //GUI.this.add(H5panel);
+
+        HistogramPanel H6panel = new HistogramPanel();
+        H6panel.addHistogramColumn("A", 350, Color.RED);
+        H6panel.addHistogramColumn("B", 690, Color.YELLOW);
+        H6panel.addHistogramColumn("C", 510, Color.BLUE);
+        H6panel.addHistogramColumn("D", 570, Color.ORANGE);
+        H6panel.addHistogramColumn("E", 180, Color.MAGENTA);
+        H6panel.addHistogramColumn("F", 504, Color.CYAN);
+        H6panel.layoutHistogram();
+
+        //GUI.this.add(H6panel);
+
+        HistoPanel.add(Hpanel);
+        HistoPanel.add(H2panel);
+        HistoPanel.add(H3panel);
+        HistoPanel.add(H4panel);
+        HistoPanel.add(H5panel);
+        HistoPanel.add(H6panel);
+        GUI.this.add(HistoPanel);
+
+        //GUI.this.add(SouthPanel);
+        GUI.this.add(CenterPanel);
+        GUI.this.add(NorthPanel);
+        GUI.this.add(CenterCPanel);
+
+        //GUI.this.add(SouthPanel);
+
+        GUI.this.revalidate();
+
+        GUI.this.repaint();
+    }
+
+
+
+
 
 
     /**
@@ -1284,7 +1676,39 @@ public class GUI extends JFrame implements ActionListener
         GUI.this.add(CenterPanel);
         GUI.this.add(SouthPanel);
 
+        Point startPoint = new Point(100, 400);
+        animate(NorthPanel, startPoint, 10000, 100);
+
     }
+
+
+
+
+
+    private void animate(JComponent component, Point newPoint, int frames, int interval) {
+        Rectangle compBounds = component.getBounds();
+
+        Point oldPoint = new Point(compBounds.x, compBounds.y),
+                animFrame = new Point((newPoint.x - oldPoint.x) / frames,
+                        (newPoint.y - oldPoint.y) / frames);
+
+        new Timer(interval, new ActionListener() {
+            int currentFrame = 0;
+            public void actionPerformed(ActionEvent e) {
+                component.setBounds(oldPoint.x + (animFrame.x * currentFrame),
+                        oldPoint.y + (animFrame.y * currentFrame),
+                        compBounds.width,
+                        compBounds.height);
+
+                if (currentFrame != frames)
+                    currentFrame++;
+                else
+                    ((Timer)e.getSource()).stop();
+                GUI.this.repaint();
+            }
+        }).start();
+    }
+
 
 
     /**
@@ -1363,7 +1787,7 @@ public class GUI extends JFrame implements ActionListener
 //        sockInput = new ObjectInputStream(sock.getInputStream());
 //        sockOutput = new ObjectOutputStream(sock.getOutputStream());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(500, 600));
+        setPreferredSize(new Dimension(1000, 1000));
         //((JPanel) getContentPane()).setBorder(new EmptyBorder(13, 13, 13, 13) );
         //setLayout(new GridLayout());
         //JButton btn = new JButton("Guess");
@@ -1371,7 +1795,7 @@ public class GUI extends JFrame implements ActionListener
         //btn.addActionListener(this);
 
 
-        this.setSize(700,1000);
+        this.setSize(1000,1000);
 
 //            JPanel allPanel = new JPanel();
 //            allPanel.setBounds(100,400,400,100);
@@ -1689,6 +2113,13 @@ public class GUI extends JFrame implements ActionListener
 
 
 
+
+
+
+
+
+
+
     /**
      * Login page
      * @throws IOException Exceptional exception
@@ -1727,6 +2158,13 @@ public class GUI extends JFrame implements ActionListener
 
         }
 
+        int squareX = 20;
+        int squareY = 220;
+        int squareW = 100;
+        int squareH = 400;
+
+
+
         this.setContentPane(new JPanel(){
             @Override
             public void paintComponent(Graphics g) {
@@ -1739,12 +2177,23 @@ public class GUI extends JFrame implements ActionListener
                 catch(Exception e/*IOException e*/) {
                     System.out.println("Bad");
                 }
+                //return to
                 super.paintComponent(g);
+
                 // Draw the background image.
                 g.drawImage(techimage, 0, 0, null);
+                //g.setColor(Color.RED);
+                //g.fillRect(squareX,squareY,squareW,squareH);
             }
         });
 
+
+
+        JSlider slider = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        slider.setMinorTickSpacing(5);
+        slider.setMajorTickSpacing(10);
 
 
         //CenterPanel.setBorder(new EmptyBorder());
@@ -1850,7 +2299,7 @@ public class GUI extends JFrame implements ActionListener
 
         btnIn3 = new JButton("History");
         btnIn3.addActionListener(this);
-        btnIn3.setActionCommand("in");
+        btnIn3.setActionCommand("beyond");
 
         NorthPanel.setLayout(new GridLayout(3,3));
         //fillPanel.setLayout(new GridLayout(1,1));
@@ -1860,12 +2309,28 @@ public class GUI extends JFrame implements ActionListener
         JLabel label12 = new JLabel("");
         JLabel label13 = new JLabel("");
 
+        final RectPanel[] rectPan = {new RectPanel()};
+        JLabel statusLabel = new JLabel();
+        slider = new JSlider(JSlider.VERTICAL,0,100,10);
+        slider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                statusLabel.setText("Value : " + ((JSlider) e.getSource()).getValue());
+                waterY = ((JSlider) e.getSource()).getValue();
+                System.out.println("WaterY is: " + waterY);
+                rectPan[0] = new RectPanel();
+                repaint();
+            }
+        });
+
+
+
         //NorthPanel.add(fillPanel);
         NorthPanel.add(label10);
         NorthPanel.add(label11);
         NorthPanel.add(label12);
-        NorthPanel.add(label13);
+        //NorthPanel.add(label13);
 
+        NorthPanel.add(slider);
         NorthPanel.add(btnIn3);
 
         CenterPanel.add(nameLabel);
@@ -1877,10 +2342,9 @@ public class GUI extends JFrame implements ActionListener
         CenterCPanel.add(btnIn2);
         //CenterPanel.add(invalidLabel);
 
-
         try {
             //techimage = ImageIO.read(GUI.class.getResource("techimage.jpg"));
-            techimage = ImageIO.read(GUI.class.getResource("tank.jpg"));
+            techimage = ImageIO.read(GUI.class.getResource("techimage.jpg"));
             //System.out.println(GUI.class.getResource("techimage.jpg").toString());
             //techimage = ImageIO.read(new File("techimage"));
         }
@@ -1900,23 +2364,63 @@ public class GUI extends JFrame implements ActionListener
 
 
 
-        SouthPanel.setLayout(new GridLayout(1,1));
-        ImageLabel label = new ImageLabel(new ImageIcon("src/tank.png"));
-        label.setLocation(29, 60);
-        SouthPanel.add(label);
+
+        //ImageLabel label = new ImageLabel(new ImageIcon("src/tank.png"));
+        //BufferedImage img = ImageIO.read(label);
+        //Graphics2D g2d = img.createGraphics();
+        //label.setLocation(0, 0);
+        //this.add(label);
+        //g.setColor(Color.cyan);
+        //g.fillRect(squareX,squareY,squareW,squareH);
 
 
 
 
 
+        //JPanel Panny = new RectPanel();
+
+
+
+       // slider.addChangeListener(this);
+
+
+
+//        ChangeListener slideListen = new ChangeListener() {
+//            @Override
+//            public void stateChanged(ChangeEvent e) {
+//                statusLabel.setText("Value : " + ((JSlider) e.getSource()).getValue());
+//                waterY = ((JSlider) e.getSource()).getValue();
+//                System.out.println("WaterY is: " + waterY);
+//                repaint();
+//            }
+//        };
+
+        //slider.addChangeListener(slideListen);
+
+       // slider.addChangeListener(new ChangeListener() {
+        //public void stateChanged(ChangeEvent e) {
+      //
+       //     }
+      //  });
+
+
+        //Panny.setLayout(new GridLayout(1,2));
+        //ImageLabel label = new ImageLabel(new ImageIcon("src/tank.png"));
+        //label.setLocation(29, 60);
+        //Panny.add(label);
+
+        //Panny.add(slider);
         //GUI.this.add(NorthPanel);
         GUI.this.setLayout(new GridLayout(2,2));
         GUI.this.getContentPane().removeAll();
 
-        GUI.this.add(SouthPanel);
+        GUI.this.add(rectPan[0]);
+
+        //GUI.this.add(SouthPanel);
         GUI.this.add(CenterPanel);
         GUI.this.add(NorthPanel);
         GUI.this.add(CenterCPanel);
+
         //GUI.this.add(SouthPanel);
 
         GUI.this.revalidate();
@@ -2052,12 +2556,26 @@ public class GUI extends JFrame implements ActionListener
         }
     }
 
+    public void stateChanged(ChangeEvent e) {
+        JSlider slider = (JSlider)e.getSource();
+        if (!slider.getValueIsAdjusting()) {
+            //statusLabel.setText("Value : " + ((JSlider) e.getSource()).getValue());
+            waterY = ((JSlider) e.getSource()).getValue();
+            System.out.println("WaterY is: " + waterY);
+            repaint();
+        }
+    }
+
+
+
     /**
      * listens to actions
      * @param e responds to stuff
      */
     public void actionPerformed(ActionEvent e)
     {
+
+
 
         if (e.getActionCommand().equals("player"))
         {
@@ -2256,6 +2774,24 @@ public class GUI extends JFrame implements ActionListener
             System.out.println("clear button flag");
             textArea.setText("");
             write("storage",textArea.getText());
+        }
+
+        if (e.getActionCommand().equals("beyond"))
+        {
+            try {
+                goSeventhPage();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+
+        if (e.getActionCommand().equals("return"))
+        {
+            try {
+                goFirstPage();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
 
 
