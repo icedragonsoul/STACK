@@ -184,7 +184,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
     /**
      * this is the center center panel
      */
-    public Panel CenterCPanel;
+    public JPanel CenterCPanel;
     /**
      * center south panel
      */
@@ -289,6 +289,8 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
 
     ArrayList<String> friends = new ArrayList<>();
 
+    ArrayList<String> numberStrings = new ArrayList<>();
+
 
     /**
      * All the players of a roster
@@ -331,6 +333,13 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
      * counter
      */
     int i = 0;
+    private String numChoice1;
+    private String durationChoice;
+    public JButton btnIn5;
+    private double humidity = 0;
+    private double airTemp = 0;
+    private double PH = 0;
+    private double nutrients = 0;
 
 
     /**
@@ -1027,13 +1036,14 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         btnIn3.addActionListener(this);
         btnIn3.setActionCommand("return");
 
-        NorthPanel.setLayout(new GridLayout(3,3));
+        NorthPanel.setLayout(new GridLayout(5,1));
         //fillPanel.setLayout(new GridLayout(1,1));
 
         JLabel label10 = new JLabel("");
         JLabel label11 = new JLabel("");
         JLabel label12 = new JLabel("");
         JLabel label13 = new JLabel("");
+
 
 //        final RectPanel[] rectPan = {new RectPanel()};
 //        JLabel statusLabel = new JLabel();
@@ -1808,7 +1818,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         CenterPanel = new JPanel();
 
         CenterNPanel = new Panel();
-        CenterCPanel = new Panel();
+        CenterCPanel = new JPanel();
         CenterSPanel = new Panel();
 
         label = new JLabel("Player 2");
@@ -2200,11 +2210,19 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
 
         int temp = 0;
         int nutrient = 0;
-        JLabel nameLabel = new JLabel ("GrowLight Control  " + temp + " units", SwingConstants.CENTER);
-        JLabel passLabel = new JLabel ("Water Pump Control: " + nutrient + " units", SwingConstants.CENTER);
+        JLabel nameLabel = new JLabel ("GrowLight Control  ", SwingConstants.LEFT);
+        nameLabel.setForeground(Color.WHITE);
+        JLabel passLabel = new JLabel ("Water Pump Control: ", SwingConstants.LEFT);
+        passLabel.setForeground(Color.WHITE);
 
-
+        nameLabel.setVerticalAlignment(JLabel.TOP);
+        nameLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        //nameLabel.setOpaque(true);
         JLabel invalidLabel = new JLabel ("");
+
+
+        passLabel.setVerticalAlignment(JLabel.TOP);
+        passLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 
         if(registerSuccess == true)
         {
@@ -2214,6 +2232,65 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
 
             registerSuccess = false;
         }
+
+        JLabel onTime = new JLabel("On Time",SwingConstants.LEFT);
+        onTime.setFont(new Font("Arial", Font.PLAIN, 20));
+        onTime.setVerticalAlignment(JLabel.TOP);
+        onTime.setForeground(Color.WHITE);
+        String[] numberStrings = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"};
+        //ArrayList<String> numberStrings = new ArrayList<>(Arrays.asList());
+        JComboBox<String> numberList = new JComboBox<>(numberStrings);
+
+        numberList.addActionListener(this);
+        numberList.setActionCommand("timer");
+        ((JLabel) numberList.getRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+
+
+        JLabel interval = new JLabel("interval",SwingConstants.LEFT);
+        interval.setFont(new Font("Arial", Font.PLAIN, 20));
+        interval.setVerticalAlignment(JLabel.TOP);
+        interval.setForeground(Color.WHITE);
+        String[] duration = new String[]{"Every Hour", "Every Day", "Every Month"};
+        JComboBox<String> durationList = new JComboBox<>(duration);
+
+        durationList.addActionListener(this);
+        durationList.setActionCommand("duration");
+
+
+
+        JLabel onTime2 = new JLabel("On Time",SwingConstants.LEFT);
+        onTime2.setFont(new Font("Arial", Font.PLAIN, 20));
+        onTime2.setVerticalAlignment(JLabel.TOP);
+        onTime2.setForeground(Color.WHITE);
+        String[] numberStrings2 = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"};
+        //ArrayList<String> numberStrings = new ArrayList<>(Arrays.asList());
+        JComboBox<String> numberList2 = new JComboBox<>(numberStrings2);
+
+        numberList2.addActionListener(this);
+        numberList2.setActionCommand("timer");
+        ((JLabel) numberList2.getRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+
+
+        JLabel interval2 = new JLabel("interval",SwingConstants.LEFT);
+        interval2.setFont(new Font("Arial", Font.PLAIN, 20));
+        interval2.setVerticalAlignment(JLabel.TOP);
+        interval2.setForeground(Color.WHITE);
+        String[] duration2 = new String[]{"Every Hour", "Every Day", "Every Month"};
+        JComboBox<String> durationList2 = new JComboBox<>(duration2);
+
+        durationList2.addActionListener(this);
+        durationList2.setActionCommand("duration");
+
+
+        //JComboBox numberList = new JComboBox(numberStrings);
+        //numberList.setSelectedIndex(22);
+
+
+
+
+
+
+        //numberList.addActionListener()
 
 
 
@@ -2262,10 +2339,11 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
 
 
 
-        CenterPanel.setLayout(new GridLayout(3,1));
+        CenterPanel.setLayout(new GridLayout(5,2));
         //CenterNPanel.setLayout(new GridLayout(1,1));
-        CenterCPanel.setLayout(new GridLayout(3,1));
+        CenterCPanel.setLayout(new GridLayout(5,2));
         //CenterSPanel.setLayout(new GridLayout(1,1));
+        CenterCPanel.setOpaque(false);
 
         textField = new JTextField(20);
 //        textField.setPreferredSize(new Dimension(2,100));
@@ -2283,18 +2361,26 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
 
 
         nameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        nameLabel.setForeground(Color.BLACK);
+        //nameLabel.setForeground(Color.BLACK);
 
         passLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        passLabel.setForeground(Color.BLACK);
+        //passLabel.setForeground(Color.BLACK);
 
 
-        btnIn = new JButton("Enter Light Value");
+        btnIn = new JButton("On");
         btnIn.addActionListener(this);
         btnIn.setActionCommand("in");
-        btnIn2 = new JButton("Enter Water Time");
+        btnIn2 = new JButton("Off");
         btnIn2.addActionListener(this);
         btnIn2.setActionCommand("in");
+
+        btnIn4 = new JButton("On");
+        btnIn4.addActionListener(this);
+        btnIn4.setActionCommand("in");
+        btnIn5 = new JButton("Off");
+        btnIn5.addActionListener(this);
+        btnIn5.setActionCommand("in");
+
 
 
         btnIn3 = new JButton("History");
@@ -2308,6 +2394,32 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         JLabel label11 = new JLabel("");
         JLabel label12 = new JLabel("");
         JLabel label13 = new JLabel("");
+        JLabel label14 = new JLabel("Humidity: " + humidity + "%");
+        JLabel label15 = new JLabel("Air Temperature" + airTemp + "°F");
+        JLabel label16 = new JLabel("Water Temperature" + airTemp + "°F");
+        JLabel label17 = new JLabel("PH" + PH + "");
+        JLabel label18 = new JLabel("Saturated Nutrients" + nutrients + "ppm");
+        label14.setFont(new Font("Arial", Font.PLAIN, 18));
+        label14.setForeground(Color.WHITE);
+        label15.setFont(new Font("Arial", Font.PLAIN, 18));
+        label15.setForeground(Color.WHITE);
+        label16.setFont(new Font("Arial", Font.PLAIN, 18));
+        label16.setForeground(Color.WHITE);
+        label17.setFont(new Font("Arial", Font.PLAIN, 18));
+        label17.setForeground(Color.WHITE);
+        label18.setFont(new Font("Arial", Font.PLAIN, 18));
+        label18.setForeground(Color.WHITE);
+
+
+
+        JLabel manual = new JLabel("Manual Control");
+        manual.setFont(new Font("Arial", Font.PLAIN, 18));
+        manual.setForeground(Color.WHITE);
+
+
+        JLabel manual2 = new JLabel("Manual Control");
+        manual2.setFont(new Font("Arial", Font.PLAIN, 18));
+        manual2.setForeground(Color.WHITE);
 
         final RectPanel[] rectPan = {new RectPanel()};
         JLabel statusLabel = new JLabel();
@@ -2325,9 +2437,11 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
 
 
         //NorthPanel.add(fillPanel);
-        NorthPanel.add(label10);
-        NorthPanel.add(label11);
-        NorthPanel.add(label12);
+        NorthPanel.add(label14);
+        NorthPanel.add(label15);
+        NorthPanel.add(label16);
+        NorthPanel.add(label17);
+        NorthPanel.add(label18);
         //NorthPanel.add(label13);
 
         NorthPanel.add(slider);
@@ -2335,11 +2449,35 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
 
         CenterPanel.add(nameLabel);
         CenterPanel.add(textField);
+        CenterPanel.add(onTime);
+        CenterPanel.add(numberList);
+        CenterPanel.add(interval);
+        CenterPanel.add(durationList);
+
+        CenterPanel.add(manual);
+
+        CenterPanel.add(label13);
         CenterPanel.add(btnIn);
+        CenterPanel.add(btnIn2);
+
+        //CenterPanel.add(btnIn);
+
 
         CenterCPanel.add(passLabel);
         CenterCPanel.add(textField2);
-        CenterCPanel.add(btnIn2);
+        CenterCPanel.add(onTime2);
+        CenterCPanel.add(numberList2);
+        CenterCPanel.add(interval2);
+        CenterCPanel.add(durationList2);
+
+        CenterCPanel.add(manual2);
+
+        CenterCPanel.add(label12);
+        CenterCPanel.add(btnIn4);
+        CenterCPanel.add(btnIn5);
+
+
+        //CenterCPanel.add(btnIn2);
         //CenterPanel.add(invalidLabel);
 
         try {
@@ -2574,8 +2712,27 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
      */
     public void actionPerformed(ActionEvent e)
     {
+        if (e.getActionCommand().equals("duration"))
+        {
+            JComboBox cb = (JComboBox)e.getSource();
 
+            durationChoice = String.valueOf(cb.getSelectedItem());
 
+            System.out.println ("type is now: " + type);
+
+            GUI.this.repaint();
+        }
+
+        if (e.getActionCommand().equals("timer"))
+        {
+            JComboBox cb = (JComboBox)e.getSource();
+
+            numChoice1 = String.valueOf(cb.getSelectedItem());
+
+            System.out.println ("type is now: " + type);
+
+            GUI.this.repaint();
+        }
 
         if (e.getActionCommand().equals("player"))
         {
